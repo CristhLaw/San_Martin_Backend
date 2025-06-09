@@ -1,5 +1,6 @@
 package pe.edu.upeu.sysalmacen.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody Categoria dto) {
+    public ResponseEntity<Void> save(@Valid @RequestBody Categoria dto) {
         Categoria obj = service.save(dto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(obj.getIdCategoria()).toUri();

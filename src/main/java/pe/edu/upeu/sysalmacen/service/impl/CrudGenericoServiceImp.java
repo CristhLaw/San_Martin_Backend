@@ -23,6 +23,8 @@ public abstract class CrudGenericoServiceImp<T,ID> implements
     public List<T> findAll() {
         return getRepo().findAll();
     }
+
+
     @Override
     public T findById(ID id) {
         return getRepo().findById(id).orElseThrow(() -> new
