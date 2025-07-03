@@ -21,11 +21,11 @@ public class Bus {
     @Column(name = "id_bus")
     private Long idbus;
 
-    @Column(name = "numero_id", nullable = false, length = 100)
-    private String numero_id;
-
-    @Column(name = "placa", nullable = false, length = 100)
+    @Column(name = "placa")
     private String placa;
+
+    @Column(name = "numero_identificador")
+    private String numeroIdentificador;
 
     @Column(name = "modelo", nullable = false, length = 100)
     private String modelo;

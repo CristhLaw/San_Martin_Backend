@@ -1,10 +1,7 @@
 package pe.edu.upeu.sysalmacen.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -13,29 +10,29 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "san_Herramienta")
+@Table(name = "san_herramientas") // mejor en plural y con snake_case
 public class Herramientas {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_Herramienta")
-    private Long idHerramienta;
+    @Column(name = "id_herramientas")
+    private Long idHerramientas;
 
-    @Column(name = "Nombre_Herramienta", nullable = false, length = 100)
+    @Column(name = "nombre_herramienta", nullable = false, length = 100)
     private String nombreHerramienta;
 
-    @Column(name = "Tamaño", length = 255)
-    private String Tamaño;
+    @Column(name = "tamano", length = 255)
+    private String tamano;
 
-    @Column(name = "Descripción", length = 255)
+    @Column(name = "descripcion", length = 255)
     private String descripcion;
 
-    @Column(name = "Fecha_Adquisición", nullable = false)
+    @Column(name = "fecha_adquisicion", nullable = false)
     private LocalDate fechaAdquisicion;
 
-    @Column(name = "Estado", nullable = false, length = 20)
+    @Column(name = "estado", nullable = false, length = 20)
     private String estado;
 
-    @Column(name = "Ubicación", length = 100)
+    @Column(name = "ubicacion", length = 100)
     private String ubicacion;
 }

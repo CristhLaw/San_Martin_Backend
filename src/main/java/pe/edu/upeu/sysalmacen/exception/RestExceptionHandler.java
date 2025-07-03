@@ -9,37 +9,35 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class RestExceptionHandler extends ResponseEntityExceptionHandler
-{
+public class RestExceptionHandler extends ResponseEntityExceptionHandler{
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<CustomErrorResponse>
+    public ResponseEntity<CustomResponse>
     handleAllExceptions(Exception ex, WebRequest request) {
-        CustomErrorResponse err = new
-                CustomErrorResponse(LocalDateTime.now(), ex.getMessage(),
+        CustomResponse err = new
+                CustomResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), LocalDateTime.now(), ex.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(err,
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
     @ExceptionHandler(ModelNotFoundException.class)
-    public ResponseEntity<CustomErrorResponse>
+    public ResponseEntity<CustomResponse>
     handleModelNotFoundException(ModelNotFoundException ex, WebRequest
             request) {
-        CustomErrorResponse err = new
-                CustomErrorResponse(LocalDateTime.now(), ex.getMessage(),
+        CustomResponse err = new
+                CustomResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),LocalDateTime.now(), ex.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(err, HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(ArithmeticException.class)
-    public ResponseEntity<CustomErrorResponse>
+    public ResponseEntity<CustomResponse>
     handleArithmeticException(ArithmeticException ex, WebRequest request)
     {
-        CustomErrorResponse err = new
-                CustomErrorResponse(LocalDateTime.now(), ex.getMessage(),
+        CustomResponse err = new
+                CustomResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),LocalDateTime.now(), ex.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
     }
@@ -50,11 +48,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
                                          status, WebRequest request) {
         String msg = ex.getBindingResult().getFieldErrors().stream()
                 .map(err ->
-
                         err.getField().concat(":").concat(err.getDefaultMessage()))
                 .collect(Collectors.joining(","));
-        CustomErrorResponse err = new
-                CustomErrorResponse(LocalDateTime.now(), msg,
+        CustomResponse err = new
+                CustomResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),LocalDateTime.now(), msg,
                 request.getDescription(false));
         return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
     }
