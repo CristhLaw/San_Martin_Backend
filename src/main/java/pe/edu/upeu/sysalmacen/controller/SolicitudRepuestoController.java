@@ -60,7 +60,7 @@ public class SolicitudRepuestoController {
         return ResponseEntity.noContent().build();
     }
 
-    // 🔹 Listar solicitudes paginadas
+    // 🔹 Listar solicitudes paginadasss
     @GetMapping("/pageable")
     public ResponseEntity<Page<SolicitudRepuestoDTO>> listPage(Pageable pageable) {
         Page<SolicitudRepuestoDTO> page = solicitudService.listaPage(pageable)
