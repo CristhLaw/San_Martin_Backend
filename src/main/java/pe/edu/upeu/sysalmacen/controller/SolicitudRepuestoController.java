@@ -6,7 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.upeu.sysalmacen.dtos.SolicitudEstadoDTO;
 import pe.edu.upeu.sysalmacen.dtos.SolicitudRepuestoDTO;
+import pe.edu.upeu.sysalmacen.dtos.SolicitudRepuestoReport;
 import pe.edu.upeu.sysalmacen.mappers.SolicitudRepuestoMapper;
 import pe.edu.upeu.sysalmacen.model.SolicitudRepuesto;
 import pe.edu.upeu.sysalmacen.service.ISolicitudRepuestoService;
@@ -60,7 +62,7 @@ public class SolicitudRepuestoController {
         return ResponseEntity.noContent().build();
     }
 
-    // 🔹 Listar solicitudes paginadasss
+    // 🔹 Listar solicitudes paginadas
     @GetMapping("/pageable")
     public ResponseEntity<Page<SolicitudRepuestoDTO>> listPage(Pageable pageable) {
         Page<SolicitudRepuestoDTO> page = solicitudService.listaPage(pageable)
@@ -81,4 +83,17 @@ public class SolicitudRepuestoController {
         solicitudRepuestoServiceImp.rechazar(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/detalle/{id}")
+    public ResponseEntity<SolicitudRepuestoReport> obtenerDetalleSolicitud(@PathVariable Long id) {
+        return ResponseEntity.ok(solicitudRepuestoServiceImp.getSolicitudDetalle(id));
+    }
+    @PutMapping("/actualizar-estado")
+    public ResponseEntity<?> actualizarEstado(@RequestBody SolicitudEstadoDTO dto) {
+        solicitudRepuestoServiceImp.actualizarEstado(dto);
+        return ResponseEntity.ok().body("Estado actualizado correctamente.");
+    }
+
+
+
 }

@@ -4,7 +4,6 @@ import lombok.*;
 
 import java.util.List;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -12,6 +11,8 @@ public class SolicitudRepuestoDTO {
     private Long idSolicitud;
     private String descripcionDeFalla;
     private String estado;
+    private String observacionRevision; // ✅ Nuevo campo
+
     private UsuarioDTO usuario;
     private BusDTO bus;
 
@@ -21,6 +22,7 @@ public class SolicitudRepuestoDTO {
     public record SolicitudRepuestoCADto(
             String descripcionDeFalla,
             String estado,
+            String observacionRevision, // ✅ Nuevo campo en record de creación/actualización
             Long usuario,
             Long bus,
             List<RepuestoCantidad> repuestos,
@@ -30,4 +32,3 @@ public class SolicitudRepuestoDTO {
     public record RepuestoCantidad(Long idRepuesto, int cantidad) {}
     public record HerramientaCantidad(Long idHerramienta, int cantidad) {}
 }
-

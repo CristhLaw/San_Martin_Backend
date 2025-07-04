@@ -3,6 +3,7 @@ package pe.edu.upeu.sysalmacen.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -34,6 +35,12 @@ public class SolicitudRepuesto {
     @Column(name = "estado", length = 50)
     private String estado;
 
+    @Column(name = "fecha_registro", updatable = false)
+    private LocalDateTime fechaRegistro;
+
+    @Column(name = "observacion_revision", columnDefinition = "TEXT")
+    private String observacionRevision;
+
     // 🔧 Repuestos solicitados (detalle)
     @OneToMany(mappedBy = "solicitud", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleRepuesto> detalleRepuestos;
@@ -42,4 +49,4 @@ public class SolicitudRepuesto {
     @OneToMany(mappedBy = "solicitud", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleHerramienta> detalleHerramientas;
 }
-//hola miamol
+//completo sin diseño

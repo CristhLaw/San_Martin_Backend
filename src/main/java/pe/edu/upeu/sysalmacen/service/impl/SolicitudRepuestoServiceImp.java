@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pe.edu.upeu.sysalmacen.dtos.SolicitudRepuestoDTO;
+import pe.edu.upeu.sysalmacen.dtos.*;
 import pe.edu.upeu.sysalmacen.mappers.SolicitudRepuestoMapper;
 import pe.edu.upeu.sysalmacen.model.DetalleHerramienta;
 import pe.edu.upeu.sysalmacen.model.DetalleRepuesto;
@@ -40,6 +40,8 @@ public class SolicitudRepuestoServiceImp extends CrudGenericoServiceImp<Solicitu
     private final IRepuestosRepository repuestosRepository;
     private final IHerramientasRepository herramientasRepository;
     private final IUsuarioRepository usuarioRepository;
+    @Autowired
+    private ISolicitudRepuestoRepository iSolicitudRepuestoRepository;
 
     @Override
     protected ICrudGenericoRepository<SolicitudRepuesto, Long> getRepo() {
@@ -181,4 +183,62 @@ public class SolicitudRepuestoServiceImp extends CrudGenericoServiceImp<Solicitu
         solicitud.setEstado("Rechazado");
         repo.save(solicitud);
     }
+    @Override
+    public SolicitudRepuestoReport getSolicitudDetalle(Long id) {
+        SolicitudRepuesto solicitud = iSolicitudRepuestoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
+
+        return SolicitudRepuestoReport.builder()
+                .idSolicitud(solicitud.getIdSolicitud())
+                .descripcionDeFalla(solicitud.getDescripcionDeFalla())
+                .estado(solicitud.getEstado())
+                .fechaRegistro(solicitud.getFechaRegistro())
+                .observacionRevision(solicitud.getObservacionRevision())
+                .usuario(UsuarioDTO.builder()
+                        .idUsuario(solicitud.getUsuario().getIdUsuario())
+                        .user(solicitud.getUsuario().getUser())
+                        .estado(solicitud.getUsuario().getEstado())
+                        .build())
+                .bus(BusDTO.builder()
+                        .idbus(solicitud.getBus().getIdbus())
+                        .placa(solicitud.getBus().getPlaca())
+                        .numeroIdentificador(solicitud.getBus().getNumeroIdentificador())
+                        .modelo(solicitud.getBus().getModelo())
+                        .capacidad(solicitud.getBus().getCapacidad())
+                        .estado(solicitud.getBus().getEstado())
+                        .fechaAdquisicion(solicitud.getBus().getFechaAdquisicion().toString())
+                        .ultimoMantenimiento(solicitud.getBus().getUltimoMantenimiento())
+                        .build())
+                .detalleRepuestos(solicitud.getDetalleRepuestos().stream().map(rep -> DetalleRepuestoDTO.builder()
+                        .id(rep.getId())
+                        .idRepuesto(rep.getRepuesto().getIdRepuestos())
+                        .nombreRepuesto(rep.getRepuesto().getNombreRepuesto())
+                        .cantidad(rep.getCantidad())
+                        .build()).toList())
+                .detalleHerramientas(solicitud.getDetalleHerramientas().stream().map(her -> DetalleHerramientaDTO.builder()
+                        .id(her.getId())
+                        .idHerramienta(her.getHerramienta().getIdHerramientas())
+                        .nombreHerramienta(her.getHerramienta().getNombreHerramienta())
+                        .cantidad(her.getCantidad())
+                        .build()).toList())
+                .build();
+    }
+
+    @Override
+    public void actualizarEstado(SolicitudEstadoDTO dto) {
+        SolicitudRepuesto solicitud = iSolicitudRepuestoRepository.findById(dto.getIdSolicitud())
+                .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
+
+        solicitud.setEstado(dto.getEstado());
+
+        if (dto.getObservacionRevision() != null) {
+            solicitud.setObservacionRevision(dto.getObservacionRevision()); // ← aquí se guarda el motivo
+        }
+
+        iSolicitudRepuestoRepository.save(solicitud);
+    }
+
+
+
+
 }
