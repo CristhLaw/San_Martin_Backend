@@ -49,4 +49,3 @@ public class SolicitudRepuesto {
     @OneToMany(mappedBy = "solicitud", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleHerramienta> detalleHerramientas;
 }
-//completo sin diseño
